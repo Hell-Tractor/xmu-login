@@ -16,6 +16,7 @@ async fn select_input_value_with_attr<'a>(document: &'a str, attr: &'a str, valu
 
 /// 学工系统统一身份认证登录
 ///
+/// # Example
 /// ```
 /// use xmu_login::create_client;
 /// use xmu_login::login;
