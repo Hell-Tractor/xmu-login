@@ -1,5 +1,9 @@
 # XMU Login Helper
 
+[![LICENSE](https://img.shields.io/github/license/Hell-Tractor/xmu-login)](./LICENSE)
+[![crates.io](https://img.shields.io/crates/v/xmu-login)](https://crates.io/crates/xmu-login)
+[![docs.rs](https://img.shields.io/docsrs/xmu-login)](https://docs.rs/xmu-login)
+
 一个用于完成厦门大学统一身份认证的Rust语言SDK。
 
 本项目由[XMU Daily Health Report - Rust CLI & SDK](https://github.com/Hell-Tractor/auto-daily-health-report)衍生而来，提取了原项目中的登录部分，并对依赖进行了更新。
