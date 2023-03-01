@@ -1,6 +1,7 @@
 use reqwest::Client;
 use anyhow::anyhow;
 use regex::Regex;
+use tokio::try_join;
 
 use super::encrypt::encrypt_aes_cbc;
 
@@ -39,9 +40,10 @@ pub async fn login(client: &Client, oauth_url: &str, username: &str, password: &
         .text()
         .await?;
 
-    let lt = select_input_value_with_attr(&login_page_resp, "name", "lt").await?;
-    let execution = select_input_value_with_attr(&login_page_resp, "name", "execution").await?;
-    let salt = select_input_value_with_attr(&login_page_resp, "id", "pwdDefaultEncryptSalt").await?;
+    let lt = select_input_value_with_attr(&login_page_resp, "name", "lt");
+    let execution = select_input_value_with_attr(&login_page_resp, "name", "execution");
+    let salt = select_input_value_with_attr(&login_page_resp, "id", "pwdDefaultEncryptSalt");
+    let (lt, execution, salt) = try_join!(lt, execution, salt)?;
     let password = encrypt_aes_cbc(&password, &salt);
 
     let post_form = [
