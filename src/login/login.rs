@@ -8,7 +8,7 @@ use super::encrypt::encrypt_aes_cbc;
 /// simple regex to match input with specific attribute
 /// since rust scraper is not compatible with async
 async fn select_input_value_with_attr<'a>(document: &'a str, attr: &'a str, value: &'a str) -> anyhow::Result<String> {
-    Regex::new(&format!(r##"<input.*{}=['"]{}['"].*value=['"](.*)['"].*[/]>"##, attr, value))?
+    Regex::new(&format!(r##"<input[^/]*{}=['"]{}['"][^/]*value=['"](.*?)['"][^/]*/>"##, attr, value))?
         .captures_iter(document)
         .next()
         .map(|cap| String::from(&cap[1]))
@@ -42,7 +42,7 @@ pub async fn login(client: &Client, oauth_url: &str, username: &str, password: &
 
     let lt = select_input_value_with_attr(&login_page_resp, "name", "lt");
     let execution = select_input_value_with_attr(&login_page_resp, "name", "execution");
-    let salt = select_input_value_with_attr(&login_page_resp, "id", "pwdDefaultEncryptSalt");
+    let salt = select_input_value_with_attr(&login_page_resp, "id", "pwdEncryptSalt");
     let (lt, execution, salt) = try_join!(lt, execution, salt)?;
     let password = encrypt_aes_cbc(&password, &salt);
 
